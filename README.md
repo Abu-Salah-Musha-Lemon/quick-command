@@ -38,6 +38,9 @@ wmic cpu get name,NumberOfCores,NumberOfLogicalProcessors
 ```bash
 wmic memorychip get capacity,manufacturer,speed
 ```
+```bash
+wmic memorychip get BankLabel, Manufacturer, PartNumber, Speed, SerialNumber
+```
 # Disk Info
 ```bash
 wmic diskdrive get model,size,serialnumber
@@ -46,7 +49,7 @@ wmic diskdrive get model,size,serialnumber
 ```bash
 wmic path win32_VideoController get name
 ```
-###Linux (Terminal)
+### Linux (Terminal)
 # System Summary
 ```bash
 sudo lshw -short
@@ -75,11 +78,11 @@ Event IDs:
 
 <br>20001 – New device installed
 <br>20003 – Device removed
-###🔧 2. Audit Plug and Play Events
+### 🔧 2. Audit Plug and Play Events
 ```bash
 Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-DriverFrameworks-UserMode/Operational'; ID=1003} |   Select-Object TimeCreated, Message
 ```
-###🧠 3. Query Installed Hardware with WMI
+### 🧠 3. Query Installed Hardware with WMI
 ```bash
 Get-WmiObject -Class Win32_PnPEntity | Select-Object Name, Manufacturer, DeviceID
 ```
