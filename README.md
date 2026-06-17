@@ -1,211 +1,225 @@
-# 🖥️ PC Hardware Check Tool
+# 🖥️ PC Hardware & System Diagnostics Toolkit
 
-This is a simple guide and script collection to help you check your PC hardware configuration using built-in command-line tools.
-
----
-
-## 📌 Features
-
-- View CPU information
-- Check RAM details
-- Inspect disk drives
-- Get GPU information
-- Display overall system info
+A collection of Windows and Linux commands for inspecting hardware, monitoring device changes, checking activation status, and managing system configuration.
 
 ---
 
-## 🧰 Requirements
+## 📋 Features
 
-### Windows:
-- PowerShell (pre-installed)
-- Administrator privileges (for full access)
+* CPU information
+* RAM details
+* Disk drive inspection
+* GPU information
+* Complete system summary
+* Hardware change auditing
+* Device installation/removal logs
+* Windows activation status
+* Windows Update management
 
-### Linux:
-- Bash terminal
-- May require installing `lshw`
+---
 
-```bash
-sudo apt install lshw
-```
-# System Info
+# Windows
+
+## 📌 System Information
+
+Display a complete system summary.
+
+```powershell
 systeminfo
+```
 
-# CPU Info
-```bash
+---
+
+## 🧠 CPU Information
+
+```powershell
 wmic cpu get name,NumberOfCores,NumberOfLogicalProcessors
 ```
-# RAM Info
-```bash
+
+---
+
+## 💾 Memory Information
+
+Basic RAM details:
+
+```powershell
 wmic memorychip get capacity,manufacturer,speed
 ```
-```bash
-wmic memorychip get BankLabel, Manufacturer, PartNumber, Speed, SerialNumber
+
+Detailed RAM information:
+
+```powershell
+wmic memorychip get BankLabel,Manufacturer,PartNumber,Speed,SerialNumber
 ```
-# Disk Info
-```bash
+
+---
+
+## 💽 Disk Information
+
+```powershell
 wmic diskdrive get model,size,serialnumber
 ```
-# GPU Info
-```bash
+
+---
+
+## 🎮 GPU Information
+
+```powershell
 wmic path win32_VideoController get name
 ```
-### Linux (Terminal)
-# System Summary
+
+---
+
+# Linux
+
+## 📌 System Summary
+
 ```bash
 sudo lshw -short
 ```
-# CPU Info
+
+---
+
+## 🧠 CPU Information
+
 ```bash
 lscpu
 ```
-# Memory Info
+
+---
+
+## 💾 Memory Information
+
 ```bash
 free -h
 ```
-# Disk Info
+
+---
+
+## 💽 Disk Information
+
 ```bash
 lsblk
 ```
-# GPU Info
+
+---
+
+## 🎮 GPU Information
+
 ```bash
 lspci | grep VGA
 ```
-🔍 1. Check for Device Installation/Removal Logs(windows  powercell)
-```bash
-Get-WinEvent -LogName System | Where-Object {    $_.Id -eq 20001 -or $_.Id -eq 20003 } | Select-Object TimeCreated, Id, Message | Format-Table -AutoSize
-```
-Event IDs:
 
-<br>20001 – New device installed
-<br>20003 – Device removed
-### 🔧 2. Audit Plug and Play Events
-```bash
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-DriverFrameworks-UserMode/Operational'; ID=1003} |   Select-Object TimeCreated, Message
-```
-### 🧠 3. Query Installed Hardware with WMI
-```bash
-Get-WmiObject -Class Win32_PnPEntity | Select-Object Name, Manufacturer, DeviceID
-```
-### 🧾 4. Export Full Hardware Snapshot (Before/After Comparison)
-```bash
-Get-WmiObject -Class Win32_PnPEntity | Export-Csv "hardware_snapshot.csv" -NoTypeInformation
-```
-🛡️ Bonus: Setup Hardware Change Auditing (Windows Only)
-Enable hardware change auditing through Group Policy:<br>
+---
 
-Run
-```bash gpedit.msc```
+# 🔍 Hardware Monitoring & Auditing (Windows)
 
-Go to Computer Configuration > Windows Settings > Security Settings > Advanced Audit Policy Configuration<br>
+## 1. Check Device Installation / Removal Logs
 
-Enable:<br>
-<br>
-Audit System Events
-<br>
-Audit Plug and Play Events
-<br>
-You can then view these in Event Viewer (eventvwr.msc).<br>
-###Create a Baseline and Compare
-Save current hardware info:
-```bach
-Get-WmiObject -Class Win32_PnPEntity | Export-Csv "C:\hardware_snapshot.csv" -NoTypeInformation
-```
-Later, run it again and compare files using:
-```bach
-Compare-Object (Import-Csv "hardware_snapshot.csv") (Import-Csv "C:\new_snapshot.csv")
+```powershell
+Get-WinEvent -LogName System |
+Where-Object {
+    $_.Id -eq 20001 -or $_.Id -eq 20003
+} |
+Select-Object TimeCreated, Id, Message |
+Format-Table -AutoSize
 ```
 
-1. Disable Windows Update Service (Permanent until re-enabled)
+### Event IDs
 
-This method disables the Windows Update service, effectively preventing updates from downloading or installing.
+| Event ID | Description      |
+| -------- | ---------------- |
+| 20001    | Device Installed |
+| 20003    | Device Removed   |
 
-Steps:
+---
 
-Press Win + R to open the Run dialog box.
+## 2. Audit Plug and Play Events
 
-Type services.msc and press Enter.
+```powershell
+Get-WinEvent -FilterHashtable @{
+    LogName='Microsoft-Windows-DriverFrameworks-UserMode/Operational'
+    ID=1003
+} |
+Select-Object TimeCreated, Message
+```
 
-In the Services window, scroll down to find Windows Update.
+---
 
-Right-click Windows Update and select Properties.
+## 3. Query Installed Hardware
 
-In the Startup type dropdown menu, select Disabled.
+```powershell
+Get-WmiObject -Class Win32_PnPEntity |
+Select-Object Name, Manufacturer, DeviceID
+```
 
-Click Stop to stop the service immediately.
+---
 
-Click Apply, then OK.
+## 4. Export Hardware Snapshot
 
-This method works well for disabling updates until you manually enable the service again.
+Create a hardware inventory for future comparison.
 
-2. Using Group Policy Editor (Pro & Enterprise versions only)
+```powershell
+Get-WmiObject -Class Win32_PnPEntity |
+Export-Csv "hardware_snapshot.csv" -NoTypeInformation
+```
 
-The Group Policy Editor is a powerful tool in Windows 11 Pro and Enterprise versions. You can use it to configure update settings and prevent updates from being installed automatically.
+---
 
-Steps:
+## 5. Compare Hardware Changes
 
-Press Win + R to open the Run dialog box.
+Create baseline:
 
-Type gpedit.msc and press Enter.
+```powershell
+Get-WmiObject -Class Win32_PnPEntity |
+Export-Csv "C:\hardware_snapshot.csv" -NoTypeInformation
+```
 
-In the Local Group Policy Editor, navigate to:
+Create a new snapshot later and compare:
 
-Computer Configuration > Administrative Templates > Windows Components > Windows Update > Manage Updates offered from Windows Update
+```powershell
+Compare-Object `
+    (Import-Csv "C:\hardware_snapshot.csv") `
+    (Import-Csv "C:\new_snapshot.csv")
+```
 
+---
 
-On the right side, double-click Configure Automatic Updates.
+# 🛡️ Enable Hardware Change Auditing
 
-Set it to Disabled and click Apply and OK.
+Open Group Policy Editor:
 
-3. Using Registry Editor (Advanced Users)
+```powershell
+gpedit.msc
+```
 
-You can modify the Windows Registry to prevent updates from being installed.
+Navigate to:
 
-Steps:
+```text
+Computer Configuration
+ └─ Windows Settings
+     └─ Security Settings
+         └─ Advanced Audit Policy Configuration
+```
 
-Press Win + R to open the Run dialog box.
+Enable:
 
-Type regedit and press Enter.
+* Audit System Events
+* Audit Plug and Play Events
 
-Navigate to the following path:
+Open Event Viewer:
 
-HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows
+```powershell
+eventvwr.msc
+```
 
+---
 
-Right-click the Windows folder, select New > Key, and name it WindowsUpdate.
+# 🔑 Windows Activation Status
 
-Right-click the WindowsUpdate folder, select New > Key, and name it AU.
+Check whether Windows activation is permanent.
 
-Right-click the AU folder, select New > DWORD (32-bit) Value, and name it NoAutoUpdate.
-
-Double-click NoAutoUpdate, set its value to 1, and click OK.
-
-Close the Registry Editor and restart your computer.
-
-4. Using Metered Connection (Temporary Solution)
-
-If you don't want to permanently disable updates but want to prevent them from downloading over your network, you can set your Wi-Fi or Ethernet connection as "metered."
-
-Steps:
-
-Go to Settings > Network & Internet.
-
-Select either Wi-Fi or Ethernet depending on your connection.
-
-Click on the network you're connected to.
-
-Toggle Set as metered connection to On.
-
-This prevents Windows 11 from automatically downloading updates when using a metered connection, but it won’t prevent manual updates or major version upgrades.
-
-5. Using Third-Party Tools (Not recommended for long-term use)
-
-There are third-party tools like O&O ShutUp10++ and Windows Update Blocker that can help manage updates on Windows, but be cautious using them. They can sometimes cause issues, and these tools may not be compatible with every Windows update.
-
-# `slmgr /xpr`
-
-Checks whether your Windows activation is permanent or has an expiration date.
-
-## Syntax
+## Command
 
 ```cmd
 slmgr /xpr
@@ -217,7 +231,7 @@ slmgr /xpr
 C:\> slmgr /xpr
 ```
 
-## Possible Outputs
+## Possible Results
 
 ### Permanent Activation
 
@@ -225,30 +239,162 @@ C:\> slmgr /xpr
 The machine is permanently activated.
 ```
 
-**Meaning:** Windows is permanently activated.
-
 ### Temporary Activation
 
 ```text
 Windows will expire on 12/31/2026 11:59:59 PM
 ```
 
-**Meaning:** Windows is activated through a temporary license (such as KMS) and will expire on the shown date.
+This usually indicates a KMS or volume-based activation.
 
-## Related Commands
+---
 
-| Command | Description |
-|----------|-------------|
-| `slmgr /dli` | Display basic license information |
-| `slmgr /dlv` | Display detailed license information |
-| `slmgr /ato` | Attempt online activation |
-| `slmgr /ipk <key>` | Install a product key |
-| `slmgr /upk` | Uninstall the current product key |
+## Related Activation Commands
 
-## Notes
+| Command            | Description                          |
+| ------------------ | ------------------------------------ |
+| `slmgr /dli`       | Display basic license information    |
+| `slmgr /dlv`       | Display detailed license information |
+| `slmgr /ato`       | Attempt activation                   |
+| `slmgr /ipk <key>` | Install product key                  |
+| `slmgr /upk`       | Uninstall product key                |
 
-- Works on Windows 10 and Windows 11.
-- Administrator privileges are recommended.
-- Useful for checking whether activation is Retail, OEM, or KMS-based.
+---
 
+# ⚙️ Windows Update Management
 
+> **Warning:** Disabling updates may expose your system to security vulnerabilities.
+
+## Method 1 — Disable Windows Update Service
+
+Open:
+
+```powershell
+services.msc
+```
+
+Locate:
+
+```text
+Windows Update
+```
+
+Change:
+
+```text
+Startup Type → Disabled
+```
+
+Then click:
+
+```text
+Stop → Apply → OK
+```
+
+---
+
+## Method 2 — Group Policy (Pro & Enterprise)
+
+Open:
+
+```powershell
+gpedit.msc
+```
+
+Navigate to:
+
+```text
+Computer Configuration
+ └─ Administrative Templates
+     └─ Windows Components
+         └─ Windows Update
+             └─ Manage Updates offered from Windows Update
+```
+
+Open:
+
+```text
+Configure Automatic Updates
+```
+
+Set to:
+
+```text
+Disabled
+```
+
+---
+
+## Method 3 — Registry Editor
+
+Open:
+
+```powershell
+regedit
+```
+
+Navigate to:
+
+```text
+HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows
+```
+
+Create:
+
+```text
+WindowsUpdate
+└─ AU
+    └─ NoAutoUpdate (DWORD)
+```
+
+Set:
+
+```text
+NoAutoUpdate = 1
+```
+
+Restart the system.
+
+---
+
+## Method 4 — Metered Connection
+
+Navigate to:
+
+```text
+Settings
+ └─ Network & Internet
+     └─ Wi-Fi / Ethernet
+```
+
+Enable:
+
+```text
+Set as metered connection
+```
+
+This prevents most automatic update downloads.
+
+---
+
+# 📦 Requirements
+
+## Windows
+
+* PowerShell
+* Administrator privileges (recommended)
+
+## Linux
+
+Install `lshw` if missing:
+
+```bash
+sudo apt update
+sudo apt install lshw
+```
+
+---
+
+# 📄 License
+
+This project is intended for educational, troubleshooting, and system administration purposes.
