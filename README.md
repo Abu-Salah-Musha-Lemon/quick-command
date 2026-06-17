@@ -200,3 +200,55 @@ This prevents Windows 11 from automatically downloading updates when using a met
 5. Using Third-Party Tools (Not recommended for long-term use)
 
 There are third-party tools like O&O ShutUp10++ and Windows Update Blocker that can help manage updates on Windows, but be cautious using them. They can sometimes cause issues, and these tools may not be compatible with every Windows update.
+
+# `slmgr /xpr`
+
+Checks whether your Windows activation is permanent or has an expiration date.
+
+## Syntax
+
+```cmd
+slmgr /xpr
+```
+
+## Example
+
+```cmd
+C:\> slmgr /xpr
+```
+
+## Possible Outputs
+
+### Permanent Activation
+
+```text
+The machine is permanently activated.
+```
+
+**Meaning:** Windows is permanently activated.
+
+### Temporary Activation
+
+```text
+Windows will expire on 12/31/2026 11:59:59 PM
+```
+
+**Meaning:** Windows is activated through a temporary license (such as KMS) and will expire on the shown date.
+
+## Related Commands
+
+| Command | Description |
+|----------|-------------|
+| `slmgr /dli` | Display basic license information |
+| `slmgr /dlv` | Display detailed license information |
+| `slmgr /ato` | Attempt online activation |
+| `slmgr /ipk <key>` | Install a product key |
+| `slmgr /upk` | Uninstall the current product key |
+
+## Notes
+
+- Works on Windows 10 and Windows 11.
+- Administrator privileges are recommended.
+- Useful for checking whether activation is Retail, OEM, or KMS-based.
+
+
