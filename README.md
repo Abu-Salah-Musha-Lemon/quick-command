@@ -392,8 +392,122 @@ Install `lshw` if missing:
 sudo apt update
 sudo apt install lshw
 ```
+---
+
+# Chris Titus Tech WinUtil
+
+A simple PowerShell command to launch **Chris Titus Tech's Windows Utility (WinUtil)**, an open-source tool for Windows optimization, software installation, system tweaks, and debloating.
+
+## Command
+
+```powershell
+irm https://christitus.com/win | iex
+````
+
+## What This Command Does
+
+The command performs the following actions:
+
+1. Downloads the latest WinUtil PowerShell script from the official website.
+2. Executes the downloaded script in memory.
+3. Launches the WinUtil graphical interface.
+
+### Command Breakdown
+
+| Command | Description                                                             |
+| ------- | ----------------------------------------------------------------------- |
+| `irm`   | Alias for `Invoke-RestMethod`, downloads content from a URL.            |
+| `iex`   | Alias for `Invoke-Expression`, executes the downloaded PowerShell code. |
+
+Equivalent command:
+
+```powershell
+Invoke-RestMethod https://christitus.com/win | Invoke-Expression
+```
 
 ---
+
+## Features
+
+* Install popular Windows applications
+* Remove unwanted pre-installed software (Debloat)
+* Apply Windows performance tweaks
+* Configure privacy settings
+* Manage Windows Update behavior
+* Repair common Windows issues
+* Backup and restore tweaks
+
+---
+
+## Requirements
+
+* Windows 10 or Windows 11
+* PowerShell 5.1 or PowerShell 7+
+* Administrator privileges
+* Internet connection
+
+---
+
+## How to Run
+
+1. Open **Windows Terminal** or **PowerShell** as **Administrator**.
+2. Copy and paste:
+
+```powershell
+irm https://christitus.com/win | iex
+```
+
+3. Press **Enter**.
+4. Wait for WinUtil to download and launch.
+
+---
+
+## Safety Notice
+
+This command downloads and immediately executes code from the Internet.
+
+Before running it:
+
+* Verify the source is trusted.
+* Review the project's source code if possible.
+* Create a System Restore Point.
+* Backup important data before making system changes.
+
+---
+
+## Why Use WinUtil?
+
+WinUtil provides a centralized interface for:
+
+* Faster Windows setup
+* Software installation
+* Removing unnecessary Windows components
+* Performance optimization
+* Privacy improvements
+* Windows maintenance
+
+---
+
+## Official Resources
+
+* Official Website: https://christitus.com/win
+* Documentation: https://winutil.christitus.com/
+* GitHub Repository: https://github.com/ChrisTitusTech/winutil
+
+---
+
+## License
+
+This project is developed and maintained by **Chris Titus Tech**.
+Refer to the GitHub repository for the latest licensing information.
+---
+
+## Disclaimer
+
+Use this utility at your own risk. Although WinUtil is widely used within the Windows community, system modifications can affect stability depending on the selected options. Always review each tweak before applying it.
+---
+
+
 
 # 📄 License
 
