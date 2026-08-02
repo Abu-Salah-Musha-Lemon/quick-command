@@ -377,6 +377,84 @@ This prevents most automatic update downloads.
 
 ---
 
+# Windows `driverquery` Command
+
+The `driverquery` command displays a list of all installed device drivers on a Windows system.
+
+## Syntax
+
+```cmd
+driverquery [options]
+```
+
+## Common Options
+
+### `driverquery /v`
+Displays a **verbose** list of drivers with additional information.
+
+```cmd
+driverquery /v
+```
+
+**Shows:**
+- Module Name
+- Display Name
+- Driver Type
+- Start Mode
+- State
+- Driver Path
+- Description
+- And more detailed information
+
+**Use case:** Troubleshooting driver issues or auditing installed drivers.
+
+---
+
+### `driverquery /si`
+Displays **digital signature information** for installed drivers.
+
+```cmd
+driverquery /si
+```
+
+**Shows:**
+- Module Name
+- Driver Status
+- Whether the driver is digitally signed
+- Signature information
+
+**Use case:** Verify that installed drivers are properly signed and identify unsigned drivers that may pose security or compatibility risks.
+
+---
+
+## Example Output
+
+### `driverquery /v`
+
+```text
+Module Name  Display Name     Driver Type   Start Mode   State
+===========  ===============  ============  ===========  =======
+ACPI         Microsoft ACPI   Kernel        Boot         Running
+```
+
+### `driverquery /si`
+
+```text
+Module Name  Signed  Status
+===========  ======  ==================
+ACPI         Yes     Digitally Signed
+```
+
+## Summary
+
+| Command | Purpose |
+|---------|---------|
+| `driverquery` | Lists installed drivers |
+| `driverquery /v` | Displays detailed (verbose) driver information |
+| `driverquery /si` | Displays driver digital signature information |
+
+---
+
 # 📦 Requirements
 
 ## Windows
