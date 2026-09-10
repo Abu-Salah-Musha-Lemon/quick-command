@@ -573,7 +573,74 @@ WinUtil provides a centralized interface for:
 * GitHub Repository: https://github.com/ChrisTitusTech/winutil
 
 ---
+# SysMain Service — Enable vs Disable
 
+**SysMain** (formerly known as Superfetch) is a Windows service that analyzes your app usage and preloads frequently used applications into memory to improve performance.
+
+## 🟢 SysMain Enabled
+
+**Startup Type:** Automatic
+
+### Advantages
+- Faster startup of frequently used applications
+- Can improve overall responsiveness on systems with HDDs
+- Windows can intelligently preload commonly used programs
+- Recommended default setting for most Windows installations
+
+### Disadvantages
+- May use some CPU and RAM in the background
+- Can sometimes cause high disk usage, especially on HDD-based systems
+- May contribute to **100% Disk Usage** on some PCs
+
+---
+
+## 🔴 SysMain Disabled
+
+**Startup Type:** Disabled
+
+### Advantages
+- Can reduce background disk activity
+- May help with **100% Disk Usage** problems
+- Can reduce CPU/RAM usage slightly
+- Useful for troubleshooting high disk activity
+
+### Disadvantages
+- Frequently used applications may take slightly longer to open
+- You lose SysMain's application preloading feature
+- Usually provides little benefit on modern SSD systems
+- Disabling it is not guaranteed to fix high disk usage
+
+---
+
+## ⚖️ Which Should You Choose?
+
+| Situation | Recommended |
+|---|---|
+| Normal PC with no disk problems | 🟢 **Enabled** |
+| PC using HDD + high disk usage | 🔴 **Try Disabled** |
+| PC using SSD + normal performance | 🟢 **Enabled** |
+| 100% Disk Usage problem | 🔴 **Test Disabled** |
+| Troubleshooting performance | 🔴 **Temporarily Disable** |
+| No noticeable problem | 🟢 **Keep Enabled** |
+
+## 💡 My Recommendation
+
+> **Keep SysMain Enabled by default.**
+
+If you're experiencing **100% Disk Usage, slow performance, or constant HDD activity**, try disabling SysMain and monitor the PC.
+
+If disabling it makes no noticeable improvement, you can safely turn it back on.
+
+### How to Re-enable
+
+1. Press `Win + R`
+2. Type `services.msc`
+3. Find **SysMain**
+4. Double-click it
+5. Set **Startup type** to `Automatic`
+6. Click **Start**
+7. Click **Apply → OK**
+---
 ## License
 
 This project is developed and maintained by **Chris Titus Tech**.
